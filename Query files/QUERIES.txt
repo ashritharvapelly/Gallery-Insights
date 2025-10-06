@@ -1,0 +1,227 @@
+From my drive , in my drive I have folder like camera,screenshots,travel folders in which those folders have image files and video files 
+From my drive using python script by creating an api between my drive and blob we have moved those images to  our blob container whic creates same folders like drive
+From that blob container we have moved to other blob container using adf pipeline to save raw data
+from that we have moved those metadata to sql tables only few metadata fields we got
+for remaining metadata fields we use databricvks to get more fields by connecting databricks to azure sql
+then from databricks we buodm dashboard 
+
+
+
+
+CAMERA
+*******
+CREATE TABLE CameraMetadata (
+    file_name NVARCHAR(255),
+    folder_name NVARCHAR(100),
+    file_size_mb FLOAT,
+    last_modified_date DATETIME,
+    file_type NVARCHAR(50),
+    content_md5 NVARCHAR(MAX)
+);
+
+GO
+
+CREATE PROCEDURE InsertCameraMetadata
+    @file_name NVARCHAR(255),
+    @file_size_mb FLOAT,
+    @last_modified_date DATETIME,
+    @file_type NVARCHAR(50),
+    @content_md5 NVARCHAR(MAX)
+AS
+BEGIN
+    INSERT INTO CameraMetadata (
+        file_name, folder_name, file_size_mb, last_modified_date, file_type, content_md5
+    )
+    VALUES (
+        @file_name, 'camera', @file_size_mb, @last_modified_date, @file_type, @content_md5
+    );
+END;
+
+select * from CameraMetadata;
+--drop table FileMetadata
+--drop procedure InsertCameraMetadata
+
+Truncation table SP
+******************
+CREATE PROCEDURE TruncateCameraMetadata
+AS
+BEGIN
+    TRUNCATE TABLE CameraMetadata;
+END;
+
+we haven't done truncation using SP we have done using  script task
+
+cganging table name:
+
+EXEC sp_rename 'dbo.SoialmedialMetadata', 'dbo.SocialmediaMetadata';
+
+
+04-08-2025
+*********
+Upto downloads pipeline are ready do remaing pipeline
+create a single pipeline by combining them
+
+create a single trigger and attach it to every pipeline so that all will executes at same time
+
+
+
+
+Steps for this project
+*************************
+created new gmail account
+ Here's a Quick Recap of What You're Doing (and it's 100% on track):
+Step	Action	Status
+1️⃣	Create new Gmail (for fresh 15GB storage)	✅ Doing now
+2️⃣	Go to Google Drive of that account	✅
+3️⃣	Create organized folders like:
+• Personal
+• College
+• WhatsApp
+• Travel
+• Documents
+• Screenshots
+• Others	✅
+4️⃣	Upload 5–10 sample images in each folder for testing	✅ Good for testing pipelines & visuals
+5️⃣	Plan to add more folders/images later — scalable & smart
+Google Drive API Integration (Python Script)
+Authenticate with your Drive account (OAuth)
+
+Traverse folders: Personal, College, WhatsApp, etc.
+
+Download new images/videos (with folder names, metadata)
+
+Upload files to Azure Blob Storage
+
+Extract metadata (file name, date, size, type, folder) and store in Azure SQL
+
+✅ Summary:
+Question	Answer
+Create folders in Blob manually?	❌ Not needed
+Use virtual paths in filenames?	✅ Yes (e.g. personal/)
+Next Step: Set Up Google Drive API Access (for Python Script)
+🔹 Step 1: Create a Google Cloud Project
+Go to Google Cloud Console.
+
+Click on "Create Project" → Give it a name like DriveToBlobProject.
+
+Once created, go to APIs & Services > Library.
+
+🔹 Step 2: Enable Google Drive API
+Search for “Google Drive API”.
+
+Click on it → Click "Enable".
+
+🔹 Step 3: Create OAuth 2.0 Credentials
+Go to APIs & Services > Credentials.
+
+Click “Create Credentials” → OAuth client ID.
+
+Choose “Desktop App” or “Web App”.
+
+Download the JSON file → this is your credentials.json.
+
+🔐 This file will be used in your Azure Function or Python script for authentication.
+Let me know once you're done with this part. I’ll give you the Python script that:
+
+Connects to Google Drive
+
+Downloads files by folder
+
+Uploads to Azure Blob Storage (organized)
+
+We’ll then deploy this as an Azure Function and  fully automate your flow ✅
+Get Access Keys (for Python script)
+Go to Storage Account → Access keys
+
+Copy:
+
+Storage account name
+
+Key1 → Connection String
+Step 2: Create OAuth 2.0 Credentials
+Go to “APIs & Services” → “Credentials”
+
+Click “+ Create Credentials” → Choose “OAuth client ID”
+
+If it asks you to Configure Consent Screen first, do this:
+
+Choose “External” → Click Create
+
+App name: Smart Gallery Organizer
+
+User support email: (your Gmail)
+
+Developer contact: (your Gmail)
+
+Click Save and Continue until the last step → then click Back to Dashboard
+
+**********************************
+install required libraries
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib azure-storage-blob
+*****************************************
+tep 1: Place your credentials.json
+Make sure your credentials.json file (from Google Cloud) is in the same directory as your Python script.an run in command prompt
+python sync_drive_to_blob.py
+What You Need to Do:
+Replace:
+
+YOUR_AZURE_BLOB_CONNECTION_STRING with your actual connection string.
+
+your-container-name with the name of your Blob container.
+
+Place credentials.json in the same folder as this Python script.
+
+Run it in terminal using:
+
+bash
+Copy
+Edit
+python your_script_name.py
+
+
+
+Steps to Get Azure Storage Account Connection String
+Go to Azure Portal
+👉 https://portal.azure.com
+
+Navigate to your Storage Account
+
+Go to “Storage accounts”
+
+Click on the storage account you created (e.g., smartgallerystore)
+
+Access Keys
+
+In the left-hand menu, under Security + networking, click on “Access keys”
+
+You’ll see Key1 and Key2
+
+Copy Connection String
+
+Under Key1, click “Show connection string”
+
+Copy the connection string
+
+Example:
+
+
+
+Step-by-Step Fix: Add Test User
+Go to the Google Cloud Console.
+
+Select your project (Smart Gallery Sync).
+
+In the left sidebar, go to:
+APIs & Services → OAuth consent screen.
+
+Scroll to the section "Test users".
+
+Click "Add users".
+
+Add your Gmail address (e.g., aiwithyou9549@gmail.com) — this must be the same Google Drive account you’re accessing.
+
+Click Save. 
+you can find option in audience 
+
+
+

@@ -1,0 +1,46 @@
+Consolidated & Unique Metadata Fields for Silver Layer
+Field Name	Description	Example
+file_name	Name of the file	IMG_20230724_1730.jpg
+file_type	Type of file: image or video	image
+file_extension	File format extension	.jpg, .mp4, .png
+file_size_mb	File size in megabytes (rounded to 2 decimals)	2.45
+folder_name	Immediate parent folder where the file is stored	camera
+relative_path	Path within blob container	camera/IMG_2023.jpg
+source_container	Source blob container (bronze layer)	gallery-images
+target_container	Destination blob container (silver layer)	silver-layer
+created_date	When file was created (from metadata or EXIF)	2023-07-24 17:30
+last_modified	Last modification timestamp from Blob metadata	2025-07-25 13:23
+upload_timestamp	Timestamp when uploaded into silver layer	2025-07-25 13:30
+is_duplicate	Flag if duplicate found based on name and size	false
+is_new_folder	Flag if folder was newly added in this sync cycle	true
+sas_url	Secure SAS URL for access	https://...IMG_2023.jpg?...
+file_category	Category like personal, travel, work (manual/AI generated)	travel
+device_type	Inferred device type from folder (e.g., mobile, screenshot)	mobile
+image_width	Width in pixels (if extracted from image)	1920
+image_height	Height in pixels (if extracted from image)	1080
+duration_sec	Duration in seconds for video files (optional)	45.7
+full_path	Full blob path including folder and file	bronze_gallery/camera/IMG_2023.jpg
+exists	Flag from Get Metadata activity in ADF indicating file exists	true
+item_type	Usually "File" if it is a file, used in ADF Get Metadata	File
+content_md5	Content hash for validation (nullable)	null or x4a2ef...
+ingestion_datetime	UTC timestamp when inserted into Azure SQL	2025-07-29 10:15:32
+duplicate_flag	Text format for is_duplicate (alternate naming used in sample)	Yes or No
+ai_tag (optional)	AI-generated image label like “Selfie”, “Document”, “Scenery”	Scenery
+blob_url (alternate to sas_url)	Public/secured URL to view the file	https://.../gallery/personal/photo.jpg
+image_id	Unique ID for internal reference (if using your own ID system)	IMG001
+
+
+
+
+Changes need to do other pipelines
+****************************
+add stored procedure for truncation 
+add stored procedure to insert into particular table by creati g them or autocreate it if possible
+
+
+Am ready with the spark code for adding new fields now we want to create df's for adding fields
+
+
+questions
+************
+I have dataframe in spark now I want o use these df's in powerbi can I use it 

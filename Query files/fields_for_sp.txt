@@ -1,0 +1,22 @@
+Step 3: Add Parameters to Stored Procedure
+Now, under the Stored Procedure Parameters section, add parameters exactly matching the names from your SP.
+
+Parameter Name	Value (expression or variable)
+@file_name	@variables('var_fileName')
+@folder_name	@variables('var_folderName')
+@file_size_mb	@variables('var_fileSizeMB')
+@last_modified	@activity('Get Metadata 2').output.lastModified
+@file_type	@activity('Get Metadata 2').output.type
+@file_extension	@{last(split(variables('var_fileName'), '.'))}
+@relative_path	@{variables('var_folderName') + '/' + variables('var_fileName')}
+@upload_timestamp	@utcnow()
+@source_container	'source-container-name'
+@target_container	'target-container-name'
+@is_duplicate	false (or expression based on logic)
+@is_new_folder	false (or expression based on logic)
+@sas_url	'dummy_or_real_sas_url'
+@file_category	'Unknown' (or dynamic logic later)
+@device_type	'Unknown' (optional for now)
+@image_width	0 (we’ll fill in later using EXIF metadata if needed)
+@image_height	0 (same as above)
+@duration_sec	0 (for videos, optional)

@@ -1,0 +1,7 @@
+drive link
+azure account
+
+connection string : DefaultEndpointsProtocol=https;AccountName=smartgallerystore;AccountKey=Zq87a2VJOOaoCT7KrcKz5QmhZUxVkUyh6CvOhz5mJU2lu57fQ63lEC6WddKd7I35FVTpk0tonlk++AStoEntjA==;EndpointSuffix=core.windows.net
+
+container name : gallery-images
+
